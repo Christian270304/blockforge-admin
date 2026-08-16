@@ -7,34 +7,70 @@ const API = '/api/v1'
 
 async function request(url, options = {}) {
 
-    const response = await fetch(`${API}${url}`, {
-        credentials: 'same-origin',
+    // Detectamos si estamos enviando FormData
+    const isFormData =
+        options.body instanceof FormData
 
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers
-        },
 
-        ...options
-    })
+    // Conservamos cualquier header adicional
+    const headers = {
+        ...options.headers
+    }
+
+
+    // Solo añadimos application/json cuando NO es FormData.
+    //
+    // Si es FormData, el navegador añadirá automáticamente:
+    //
+    // multipart/form-data; boundary=...
+    //
+    // NO debemos establecerlo manualmente.
+    if (!isFormData) {
+        headers['Content-Type'] =
+            'application/json'
+    }
+
+
+    const response = await fetch(
+        `${API}${url}`,
+        {
+            ...options,
+
+            credentials:
+                'same-origin',
+
+            headers
+        }
+    )
 
 
     let data = null
 
+
     try {
-        data = await response.json()
+
+        data =
+            await response.json()
+
     } catch {
-        data = null
+
+        data =
+            null
     }
 
 
     if (!response.ok) {
 
-        const error = new Error(
-            data?.error || `HTTP ${response.status}`
-        )
+        const error =
+            new Error(
+                data?.error ||
+                `HTTP ${response.status}`
+            )
 
-        error.status = response.status
+
+        error.status =
+            response.status
+
 
         throw error
     }
@@ -251,6 +287,29 @@ export function deleteMod(
         `/admin/modpacks/${modpackId}/versions/${versionId}/mods/${modId}`,
         {
             method: 'DELETE'
+        }
+    )
+}
+
+export function uploadModFile(
+    modpackId,
+    versionId,
+    file
+) {
+
+    const formData =
+        new FormData()
+
+    formData.append(
+        'file',
+        file
+    )
+
+    return request(
+        `/admin/files/modpacks/${modpackId}/versions/${versionId}/mods`,
+        {
+            method: 'POST',
+            body: formData
         }
     )
 }

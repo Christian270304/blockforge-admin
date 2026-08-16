@@ -506,10 +506,15 @@ function drawVersions() {
 
                     if (version) {
 
-                        console.log(
-                            'Abrir versión:',
-                            version
-                        )
+                        import('./version-detail.js')
+                            .then(module => {
+
+                                module.renderVersionDetail(
+                                    currentModpack,
+                                    version
+                                )
+
+                            })
 
                     }
                 }

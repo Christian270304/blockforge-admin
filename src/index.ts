@@ -4,6 +4,7 @@ import { adminModpacks } from './routes/admin/modpacks'
 import { auth } from './routes/auth'
 import { requireAuth } from './middleware/auth'
 import { modrinth } from './routes/modrinth'
+import { files } from './routes/files'
 
 type Bindings = {
     ASSETS: Fetcher
@@ -48,6 +49,10 @@ app.use('/api/v1/admin/*', requireAuth)
 app.route(
     '/api/v1/admin/modrinth',
     modrinth
+)
+app.route(
+    '/api/v1/admin/files',
+    files
 )
 app.route('/api/v1/admin/modpacks', adminModpacks)
 app.route('/api/v1/auth', auth)

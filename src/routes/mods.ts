@@ -61,6 +61,8 @@ mods.get(
                     project_id,
                     version_id,
                     download_url,
+                    storage_provider,
+                    storage_id,
                     required,
                     sha256,
                     created_at
@@ -136,6 +138,16 @@ mods.post(
                 ? String(body.sha256).trim()
                 : null
 
+        const storageProvider =
+            body.storageProvider
+                ? String(body.storageProvider).trim()
+                : null
+
+        const storageId =
+            body.storageId
+                ? String(body.storageId).trim()
+                : null
+
 
         // ====================================================
         // VALIDATION
@@ -188,15 +200,31 @@ mods.post(
 
 
         if (
-            (source === 'storage' ||
-             source === 'url') &&
-            !downloadUrl
+            source === 'storage' &&
+            (
+                !storageProvider ||
+                !storageId ||
+                !downloadUrl
+            )
         ) {
-
             return c.json(
                 {
                     error:
-                        'Esta fuente necesita una URL de descarga'
+                        'Los archivos propios necesitan storageProvider, storageId y downloadUrl'
+                },
+                400
+            )
+        }
+
+
+        if (
+            source === 'url' &&
+            !downloadUrl
+        ) {
+            return c.json(
+                {
+                    error:
+                        'Los mods externos necesitan downloadUrl'
                 },
                 400
             )
@@ -237,34 +265,42 @@ mods.post(
         // INSERT
         // ====================================================
 
-        const result = await c.env.DB
-            .prepare(`
-                INSERT INTO mods (
-                    modpack_version_id,
+        const result =
+            await c.env.DB
+                .prepare(`
+                    INSERT INTO mods (
+                        modpack_version_id,
+                        name,
+                        filename,
+                        source,
+                        project_id,
+                        version_id,
+                        download_url,
+                        storage_provider,
+                        storage_id,
+                        required,
+                        sha256
+                    )
+
+                    VALUES (
+                        ?, ?, ?, ?, ?, ?,
+                        ?, ?, ?, ?, ?
+                    )
+                `)
+                .bind(
+                    versionId,
                     name,
                     filename,
                     source,
-                    project_id,
-                    version_id,
-                    download_url,
+                    projectId,
+                    sourceVersionId,
+                    downloadUrl,
+                    storageProvider,
+                    storageId,
                     required,
                     sha256
                 )
-
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `)
-            .bind(
-                versionId,
-                name,
-                filename,
-                source,
-                projectId,
-                sourceVersionId,
-                downloadUrl,
-                required,
-                sha256
-            )
-            .run()
+                .run()
 
 
         return c.json(
