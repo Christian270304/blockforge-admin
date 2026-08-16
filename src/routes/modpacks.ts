@@ -1,44 +1,120 @@
 import { Hono } from 'hono'
 
-export const modpacks = new Hono()
+
+// ============================================================
+// BINDINGS
+// ============================================================
+
+type Bindings = {
+    DB: D1Database
+}
+
+
+// ============================================================
+// ROUTER
+// ============================================================
+
+export const modpacks = new Hono<{
+    Bindings: Bindings
+}>()
 
 
 // ============================================================
 // GET ALL MODPACKS
 // ============================================================
 
-modpacks.get('/', (c) => {
-    return c.json({
-        modpacks: [
+modpacks.get('/', async (c) => {
+
+    try {
+
+        const result = await c.env.DB
+            .prepare(`
+                SELECT
+                    id,
+                    name,
+                    slug,
+                    description,
+                    minecraft_version,
+                    loader,
+                    loader_version,
+                    server_address,
+                    status,
+                    created_at,
+                    updated_at
+                FROM modpacks
+                ORDER BY created_at DESC
+            `)
+            .all()
+
+        return c.json({
+            modpacks: result.results
+        })
+
+    } catch (error) {
+
+        console.error(error)
+
+        return c.json(
             {
-                id: 1,
-                name: 'FailZone',
-                slug: 'failzone',
-                minecraftVersion: '1.20.1',
-                loader: 'forge',
-                loaderVersion: '47.4.20',
-                status: 'published'
-            }
-        ]
-    })
+                error: 'No se pudieron obtener los modpacks'
+            },
+            500
+        )
+    }
 })
 
 
 // ============================================================
-// GET MODPACK
+// GET MODPACK BY SLUG
 // ============================================================
 
-modpacks.get('/:slug', (c) => {
+modpacks.get('/:slug', async (c) => {
 
     const slug = c.req.param('slug')
 
-    return c.json({
-        id: 1,
-        name: 'FailZone',
-        slug,
-        minecraftVersion: '1.20.1',
-        loader: 'forge',
-        loaderVersion: '47.4.20',
-        status: 'published'
-    })
+    try {
+
+        const modpack = await c.env.DB
+            .prepare(`
+                SELECT
+                    id,
+                    name,
+                    slug,
+                    description,
+                    minecraft_version,
+                    loader,
+                    loader_version,
+                    server_address,
+                    status,
+                    created_at,
+                    updated_at
+                FROM modpacks
+                WHERE slug = ?
+            `)
+            .bind(slug)
+            .first()
+
+        if (!modpack) {
+
+            return c.json(
+                {
+                    error: 'Modpack no encontrado'
+                },
+                404
+            )
+        }
+
+        return c.json(modpack)
+
+    } catch (error) {
+
+        console.error(error)
+
+        return c.json(
+            {
+                error: 'No se pudo obtener el modpack'
+            },
+            500
+        )
+    }
 })

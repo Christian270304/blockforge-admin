@@ -39,7 +39,7 @@
 	},
 	"d1_databases": [
 		{
-			"binding": "blockforge_db",
+			"binding": "DB",
 			"database_name": "blockforge-db",
 			"database_id": "946c8749-24d5-461a-be38-a4c8979bd319"
 		}

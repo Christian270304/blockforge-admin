@@ -1,9 +1,7 @@
 <!doctype html>
-
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -23,26 +21,42 @@
         src="/js/app.js"
         defer
     ></script>
-
 </head>
 
 <body>
 
-    <main>
+    <!-- ======================================================
+         APP
+         ====================================================== -->
 
-        <h1>BlockForge Admin</h1>
+    <div id="app">
 
-        <p>
-            Gestión de modpacks
-        </p>
+        <div class="app-loading">
+            <div class="loader"></div>
+            <span>Cargando BlockForge...</span>
+        </div>
 
-        <button id="loadModpacks">
-            Cargar modpacks
-        </button>
+    </div>
 
-        <div id="modpacks"></div>
 
-    </main>
+    <!-- ======================================================
+         MODAL
+         ====================================================== -->
+
+    <div
+        id="modalOverlay"
+        class="modal-overlay"
+    ></div>
+
+
+    <!-- ======================================================
+         TOAST
+         ====================================================== -->
+
+    <div
+        id="toastContainer"
+        class="toast-container"
+    ></div>
 
 </body>
 
