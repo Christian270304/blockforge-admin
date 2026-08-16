@@ -189,3 +189,134 @@ export async function uploadRawFile(
             file.name
     }
 }
+
+
+// ============================================================
+// DELETE RAW FILE
+// ============================================================
+
+export async function deleteRawFile(
+    env: CloudinaryBindings,
+    publicId: string
+): Promise<void> {
+
+    const timestamp =
+        Math.floor(Date.now() / 1000)
+
+
+    // ========================================================
+    // FIRMA
+    // ========================================================
+
+    const paramsToSign = {
+        public_id: publicId,
+        timestamp
+    }
+
+
+    const signatureString =
+        Object
+            .entries(paramsToSign)
+            .sort(([a], [b]) =>
+                a.localeCompare(b)
+            )
+            .map(([key, value]) =>
+                `${key}=${value}`
+            )
+            .join('&')
+        +
+        env.CLOUDINARY_API_SECRET
+
+
+    const signature =
+        await sha1(signatureString)
+
+
+    // ========================================================
+    // FORM DATA
+    // ========================================================
+
+    const formData =
+        new FormData()
+
+
+    formData.append(
+        'public_id',
+        publicId
+    )
+
+    formData.append(
+        'api_key',
+        env.CLOUDINARY_API_KEY
+    )
+
+    formData.append(
+        'timestamp',
+        String(timestamp)
+    )
+
+    formData.append(
+        'signature',
+        signature
+    )
+
+
+    // ========================================================
+    // CLOUDINARY REQUEST
+    // ========================================================
+
+    const endpoint =
+        `https://api.cloudinary.com/v1_1/${
+            env.CLOUDINARY_CLOUD_NAME
+        }/raw/destroy`
+
+
+    const response =
+        await fetch(
+            endpoint,
+            {
+                method: 'POST',
+                body: formData
+            }
+        )
+
+
+    const data: any =
+        await response.json()
+
+
+    if (!response.ok) {
+
+        console.error(
+            'Cloudinary delete error:',
+            data
+        )
+
+
+        throw new Error(
+            data?.error?.message ||
+            `Cloudinary respondió ${response.status}`
+        )
+    }
+
+
+    // Cloudinary normalmente devuelve:
+    //
+    // { result: "ok" }
+    //
+    // Si el archivo ya no existe:
+    //
+    // { result: "not found" }
+    //
+    // Ambos casos nos sirven.
+
+    if (
+        data.result !== 'ok' &&
+        data.result !== 'not found'
+    ) {
+
+        throw new Error(
+            `Cloudinary no pudo eliminar el archivo: ${data.result}`
+        )
+    }
+}

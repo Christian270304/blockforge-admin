@@ -294,16 +294,32 @@ export function deleteMod(
 export function uploadModFile(
     modpackId,
     versionId,
-    file
+    file,
+    name,
+    required = true
 ) {
 
     const formData =
         new FormData()
 
+
     formData.append(
         'file',
         file
     )
+
+
+    formData.append(
+        'name',
+        name
+    )
+
+
+    formData.append(
+        'required',
+        String(required)
+    )
+
 
     return request(
         `/admin/files/modpacks/${modpackId}/versions/${versionId}/mods`,

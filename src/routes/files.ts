@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 
 import {
-    uploadRawFile
+    uploadRawFile,
+    deleteRawFile
 } from '../services/cloudinary'
 
 
@@ -120,6 +121,27 @@ files.post(
         const uploaded =
             body.get('file')
 
+        const name =
+            String(
+                body.get('name') || ''
+            ).trim()
+
+
+        const required =
+            String(
+                body.get('required') || 'true'
+            ) === 'true'
+
+        if (!name) {
+
+            return c.json(
+                {
+                    error:
+                        'El nombre del mod es obligatorio'
+                },
+                400
+            )
+        }
 
         if (
             !uploaded ||
@@ -237,29 +259,81 @@ files.post(
         // CLOUDINARY
         // ====================================================
 
+        const cloudinary =
+            await uploadRawFile(
+                c.env,
+                uploadFile,
+                folder
+            )
+
+
         try {
 
-            const cloudinary =
-                await uploadRawFile(
-                    c.env,
-                    uploadFile,
-                    folder
-                )
+            // ========================================================
+            // GUARDAR MOD EN D1
+            // ========================================================
+
+            const result =
+                await c.env.DB
+                    .prepare(`
+                        INSERT INTO mods (
+                            modpack_version_id,
+                            name,
+                            filename,
+                            source,
+                            project_id,
+                            version_id,
+                            download_url,
+                            storage_provider,
+                            storage_id,
+                            required,
+                            sha256
+                        )
+
+                        VALUES (
+                            ?, ?, ?, ?, ?, ?,
+                            ?, ?, ?, ?, ?
+                        )
+                    `)
+                    .bind(
+                        versionId,
+                        name,
+                        file.name,
+                        'storage',
+
+                        // No procede para Cloudinary
+                        null,
+                        null,
+
+                        cloudinary.url,
+                        'cloudinary',
+                        cloudinary.publicId,
+
+                        required ? 1 : 0,
+                        sha256
+                    )
+                    .run()
 
 
             return c.json(
                 {
                     success: true,
 
-                    file: {
+                    mod: {
+
+                        id:
+                            result.meta.last_row_id,
+
+                        modpackVersionId:
+                            versionId,
+
+                        name,
 
                         filename:
                             file.name,
 
-                        size:
-                            file.size,
-
-                        sha256,
+                        source:
+                            'storage',
 
                         storageProvider:
                             'cloudinary',
@@ -268,33 +342,48 @@ files.post(
                             cloudinary.publicId,
 
                         downloadUrl:
-                            cloudinary.url
+                            cloudinary.url,
+
+                        sha256,
+
+                        required
                     }
                 },
                 201
             )
 
-
-        } catch (error) {
+        } catch (databaseError) {
 
             console.error(
-                'Error subiendo archivo:',
-                error
+                'Error guardando mod en D1:',
+                databaseError
             )
 
 
-            return c.json(
-                {
-                    error:
-                        error instanceof Error
-                            ? error.message
-                            : 'No se pudo subir el archivo'
-                },
-                502
-            )
+            // ========================================================
+            // ROLLBACK CLOUDINARY
+            // ========================================================
+
+            try {
+
+                await deleteRawFile(
+                    c.env,
+                    cloudinary.publicId
+                )
+
+            } catch (cleanupError) {
+
+                console.error(
+                    'IMPORTANTE: no se pudo limpiar Cloudinary:',
+                    cleanupError
+                )
+            }
+
+
+            throw databaseError
         }
-    }
-)
+            }
+        )
 
 
 // ============================================================

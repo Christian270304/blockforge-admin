@@ -1,7 +1,14 @@
 import { Hono } from 'hono'
+import {
+    deleteRawFile
+} from '../services/cloudinary'
 
 type Bindings = {
     DB: D1Database
+
+    CLOUDINARY_CLOUD_NAME: string
+    CLOUDINARY_API_KEY: string
+    CLOUDINARY_API_SECRET: string
 }
 
 export const mods = new Hono<{
@@ -496,21 +503,48 @@ mods.delete(
             Number(c.req.param('modId'))
 
 
+        // ====================================================
+        // VALIDAR IDs
+        // ====================================================
+
+        if (
+            !Number.isInteger(modpackId) ||
+            !Number.isInteger(versionId) ||
+            !Number.isInteger(modId)
+        ) {
+
+            return c.json(
+                {
+                    error:
+                        'ID inválido'
+                },
+                400
+            )
+        }
+
+
+        // ====================================================
+        // COMPROBAR VERSIÓN
+        // ====================================================
+        //
         // Evitamos poder borrar un mod perteneciente
         // a una versión de otro modpack.
 
-        const version = await c.env.DB
-            .prepare(`
-                SELECT id
-                FROM modpack_versions
-                WHERE id = ?
-                AND modpack_id = ?
-            `)
-            .bind(
-                versionId,
-                modpackId
-            )
-            .first()
+        const version =
+            await c.env.DB
+                .prepare(`
+                    SELECT id
+
+                    FROM modpack_versions
+
+                    WHERE id = ?
+                    AND modpack_id = ?
+                `)
+                .bind(
+                    versionId,
+                    modpackId
+                )
+                .first()
 
 
         if (!version) {
@@ -525,21 +559,41 @@ mods.delete(
         }
 
 
-        const result = await c.env.DB
-            .prepare(`
-                DELETE FROM mods
+        // ====================================================
+        // OBTENER MOD ANTES DE BORRARLO
+        // ====================================================
+        //
+        // Necesitamos saber si está almacenado en Cloudinary.
 
-                WHERE id = ?
-                AND modpack_version_id = ?
-            `)
-            .bind(
-                modId,
-                versionId
-            )
-            .run()
+        const mod =
+            await c.env.DB
+                .prepare(`
+                    SELECT
+                        id,
+                        source,
+                        storage_provider,
+                        storage_id
+
+                    FROM mods
+
+                    WHERE id = ?
+                    AND modpack_version_id = ?
+
+                    LIMIT 1
+                `)
+                .bind(
+                    modId,
+                    versionId
+                )
+                .first<{
+                    id: number
+                    source: string
+                    storage_provider: string | null
+                    storage_id: string | null
+                }>()
 
 
-        if (result.meta.changes === 0) {
+        if (!mod) {
 
             return c.json(
                 {
@@ -550,6 +604,88 @@ mods.delete(
             )
         }
 
+
+        // ====================================================
+        // ELIMINAR ARCHIVO DE CLOUDINARY
+        // ====================================================
+        //
+        // Solo hacemos esto para archivos propios.
+        //
+        // Modrinth → no tocamos nada
+        // URL externa → no tocamos nada
+        // Cloudinary → eliminamos el archivo
+
+        if (
+            mod.source === 'storage' &&
+            mod.storage_provider === 'cloudinary' &&
+            mod.storage_id
+        ) {
+
+            try {
+
+                await deleteRawFile(
+                    c.env,
+                    mod.storage_id
+                )
+
+            } catch (error) {
+
+                console.error(
+                    'Error eliminando archivo de Cloudinary:',
+                    error
+                )
+
+
+                // IMPORTANTE:
+                //
+                // Si Cloudinary falla NO borramos D1.
+                // Así podemos volver a intentarlo después.
+
+                return c.json(
+                    {
+                        error:
+                            'No se pudo eliminar el archivo de Cloudinary'
+                    },
+                    502
+                )
+            }
+        }
+
+
+        // ====================================================
+        // ELIMINAR REGISTRO DE D1
+        // ====================================================
+
+        const result =
+            await c.env.DB
+                .prepare(`
+                    DELETE FROM mods
+
+                    WHERE id = ?
+                    AND modpack_version_id = ?
+                `)
+                .bind(
+                    modId,
+                    versionId
+                )
+                .run()
+
+
+        if (result.meta.changes === 0) {
+
+            return c.json(
+                {
+                    error:
+                        'No se pudo eliminar el mod'
+                },
+                500
+            )
+        }
+
+
+        // ====================================================
+        // RESPONSE
+        // ====================================================
 
         return c.json({
             success: true

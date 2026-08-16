@@ -2407,71 +2407,24 @@ async function saveStorageMod(file) {
             true
 
         button.textContent =
-            'Subiendo archivo...'
+            'Subiendo mod...'
 
 
         // ====================================================
-        // 1. CLOUDINARY
+        // CLOUDINARY + D1
         // ====================================================
 
-        const upload =
-            await uploadModFile(
-                currentModpack.id,
-                currentVersion.id,
-                file
-            )
-
-
-        if (!upload.file) {
-            throw new Error(
-                'La API no devolvió información del archivo'
-            )
-        }
-
-
-        button.textContent =
-            'Guardando mod...'
-
-
-        // ====================================================
-        // 2. D1
-        // ====================================================
-
-        await createMod(
+        await uploadModFile(
             currentModpack.id,
             currentVersion.id,
-            {
-
-                name,
-
-                // MUY IMPORTANTE:
-                // nombre original exacto
-                filename:
-                    upload.file.filename,
-
-                source:
-                    'storage',
-
-                storageProvider:
-                    upload.file.storageProvider,
-
-                storageId:
-                    upload.file.storageId,
-
-                downloadUrl:
-                    upload.file.downloadUrl,
-
-                sha256:
-                    upload.file.sha256,
-
-                required:
-                    requiredInput.checked
-            }
+            file,
+            name,
+            requiredInput.checked
         )
 
 
         // ====================================================
-        // 3. UI
+        // ACTUALIZAR UI
         // ====================================================
 
         closeAddModModal()
