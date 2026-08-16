@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { versions } from '../versions'
 
 
 type Bindings = {
@@ -384,3 +385,5 @@ adminModpacks.delete('/:id', async (c) => {
         )
     }
 })
+
+adminModpacks.route('/', versions)

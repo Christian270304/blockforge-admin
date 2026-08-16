@@ -3,6 +3,7 @@ import { modpacks } from './routes/modpacks'
 import { adminModpacks } from './routes/admin/modpacks'
 import { auth } from './routes/auth'
 import { requireAuth } from './middleware/auth'
+import { versions } from './routes/versions'
 
 type Bindings = {
     ASSETS: Fetcher
