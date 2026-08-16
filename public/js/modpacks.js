@@ -5,6 +5,10 @@ import {
     deleteModpack
 } from './api.js'
 
+import {
+    renderModpackDetail
+} from './versions.js'
+
 
 let modpacks = []
 
@@ -271,6 +275,43 @@ function renderModpacks() {
                 }
             )
         })
+
+    list
+    .querySelectorAll('[data-open-modpack]')
+    .forEach(card => {
+
+        card.addEventListener(
+            'click',
+            event => {
+
+                if (
+                    event.target.closest(
+                        '[data-edit], [data-delete]'
+                    )
+                ) {
+                    return
+                }
+
+
+                const id =
+                    Number(
+                        card.dataset.openModpack
+                    )
+
+
+                const modpack =
+                    modpacks.find(
+                        item => item.id === id
+                    )
+
+
+                if (modpack) {
+                    renderModpackDetail(modpack)
+                }
+
+            }
+        )
+    })
 }
 
 
@@ -287,7 +328,10 @@ function modpackCard(modpack) {
 
     return `
 
-        <article class="modpack-card">
+        <article
+            class="modpack-card"
+            data-open-modpack="${modpack.id}"
+        >
 
             <div class="modpack-card-top">
 

@@ -109,3 +109,148 @@ export function deleteModpack(id) {
         method: 'DELETE'
     })
 }
+
+// ============================================================
+// MODPACK VERSIONS
+// ============================================================
+
+export function getModpackVersions(modpackId) {
+    return request(
+        `/admin/modpacks/${modpackId}/versions`
+    )
+}
+
+
+export function createModpackVersion(modpackId, version) {
+    return request(
+        `/admin/modpacks/${modpackId}/versions`,
+        {
+            method: 'POST',
+            body: JSON.stringify(version)
+        }
+    )
+}
+
+
+export function updateModpackVersion(
+    modpackId,
+    versionId,
+    version
+) {
+    return request(
+        `/admin/modpacks/${modpackId}/versions/${versionId}`,
+        {
+            method: 'PUT',
+            body: JSON.stringify(version)
+        }
+    )
+}
+
+
+export function deleteModpackVersion(
+    modpackId,
+    versionId
+) {
+    return request(
+        `/admin/modpacks/${modpackId}/versions/${versionId}`,
+        {
+            method: 'DELETE'
+        }
+    )
+}
+
+// ============================================================
+// MODRINTH
+// ============================================================
+
+export function searchModrinth(query) {
+
+    return request(
+        `/admin/modrinth/search?q=${
+            encodeURIComponent(query)
+        }`
+    )
+}
+
+
+export function getModrinthVersions(
+    projectId,
+    minecraft,
+    loader
+) {
+
+    const params =
+        new URLSearchParams({
+            minecraft,
+            loader
+        })
+
+
+    return request(
+        `/admin/modrinth/projects/${
+            encodeURIComponent(projectId)
+        }/versions?${params.toString()}`
+    )
+}
+
+// ============================================================
+// MODPACK MODS
+// ============================================================
+
+export function getMods(
+    modpackId,
+    versionId
+) {
+
+    return request(
+        `/admin/modpacks/${modpackId}/versions/${versionId}/mods`
+    )
+}
+
+
+export function createMod(
+    modpackId,
+    versionId,
+    mod
+) {
+
+    return request(
+        `/admin/modpacks/${modpackId}/versions/${versionId}/mods`,
+        {
+            method: 'POST',
+            body: JSON.stringify(mod)
+        }
+    )
+}
+
+
+export function updateMod(
+    modpackId,
+    versionId,
+    modId,
+    mod
+) {
+
+    return request(
+        `/admin/modpacks/${modpackId}/versions/${versionId}/mods/${modId}`,
+        {
+            method: 'PUT',
+            body: JSON.stringify(mod)
+        }
+    )
+}
+
+
+export function deleteMod(
+    modpackId,
+    versionId,
+    modId
+) {
+
+    return request(
+        `/admin/modpacks/${modpackId}/versions/${versionId}/mods/${modId}`,
+        {
+            method: 'DELETE'
+        }
+    )
+}

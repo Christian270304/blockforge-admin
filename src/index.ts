@@ -3,7 +3,7 @@ import { modpacks } from './routes/modpacks'
 import { adminModpacks } from './routes/admin/modpacks'
 import { auth } from './routes/auth'
 import { requireAuth } from './middleware/auth'
-import { versions } from './routes/versions'
+import { modrinth } from './routes/modrinth'
 
 type Bindings = {
     ASSETS: Fetcher
@@ -45,6 +45,10 @@ app.get('/api', (c) => {
 
 app.route('/api/v1/modpacks', modpacks)
 app.use('/api/v1/admin/*', requireAuth)
+app.route(
+    '/api/v1/admin/modrinth',
+    modrinth
+)
 app.route('/api/v1/admin/modpacks', adminModpacks)
 app.route('/api/v1/auth', auth)
 
