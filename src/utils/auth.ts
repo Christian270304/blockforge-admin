@@ -94,7 +94,7 @@ export async function hashPassword(
 
             salt: hexToBytes(saltHex) as BufferSource,
 
-            iterations: 210000,
+            iterations: 100000,
 
             hash: 'SHA-256'
         },

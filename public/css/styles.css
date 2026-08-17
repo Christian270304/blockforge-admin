@@ -1,5 +1,5 @@
 /* ============================================================
-   RESET
+   1. RESET & VARIABLES
    ============================================================ */
 
 * {
@@ -37,7 +37,6 @@
         sans-serif;
 }
 
-
 html,
 body {
     margin: 0;
@@ -45,12 +44,10 @@ body {
     min-height: 100%;
 }
 
-
 body {
     background: var(--bg);
     color: var(--text);
 }
-
 
 button,
 input,
@@ -59,14 +56,13 @@ select {
     font: inherit;
 }
 
-
 button {
     cursor: pointer;
 }
 
 
 /* ============================================================
-   LOADING
+   2. LOADING
    ============================================================ */
 
 .app-loading {
@@ -78,14 +74,19 @@ button {
 
     gap: 12px;
 
+    padding: 0 20px;
+
     color: var(--text-soft);
     font-size: 14px;
+    text-align: center;
 }
 
-
-.loader {
+.loader,
+.spinner {
     width: 18px;
     height: 18px;
+
+    flex-shrink: 0;
 
     border: 2px solid #ddd;
     border-top-color: var(--accent);
@@ -94,6 +95,13 @@ button {
     animation: spin .7s linear infinite;
 }
 
+.spinner {
+    width: 22px;
+    height: 22px;
+
+    border-color: #e3e5e8;
+    border-top-color: var(--accent);
+}
 
 @keyframes spin {
     to {
@@ -103,7 +111,7 @@ button {
 
 
 /* ============================================================
-   LOGIN
+   3. LOGIN
    ============================================================ */
 
 .login-page {
@@ -114,7 +122,6 @@ button {
 
     background: var(--surface);
 }
-
 
 .login-decoration {
     padding: 60px;
@@ -141,7 +148,6 @@ button {
     overflow: hidden;
 }
 
-
 .login-decoration::after {
     content: "";
 
@@ -161,7 +167,6 @@ button {
         0 0 0 140px rgba(255,255,255,.015);
 }
 
-
 .forge-symbol,
 .login-logo,
 .brand-icon {
@@ -172,7 +177,6 @@ button {
     letter-spacing: -1px;
 }
 
-
 .forge-symbol {
     width: 58px;
     height: 58px;
@@ -182,12 +186,10 @@ button {
     background: var(--accent);
 }
 
-
 .login-brand {
     font-size: 25px;
     font-weight: 700;
 }
-
 
 .login-brand-subtitle {
     margin-top: 4px;
@@ -198,7 +200,6 @@ button {
     letter-spacing: 2px;
 }
 
-
 .login-panel {
     display: grid;
     place-items: center;
@@ -206,11 +207,9 @@ button {
     padding: 40px;
 }
 
-
 .login-card {
     width: min(390px, 100%);
 }
-
 
 .login-logo {
     width: 45px;
@@ -224,14 +223,12 @@ button {
     background: var(--accent);
 }
 
-
 .login-header h1 {
     margin: 0;
 
     font-size: 30px;
     letter-spacing: -1px;
 }
-
 
 .login-header p {
     margin: 10px 0 35px;
@@ -242,7 +239,6 @@ button {
     line-height: 1.6;
 }
 
-
 .login-button {
     width: 100%;
     margin-top: 10px;
@@ -250,7 +246,7 @@ button {
 
 
 /* ============================================================
-   FORMS
+   4. FORMS
    ============================================================ */
 
 .form-group {
@@ -261,11 +257,9 @@ button {
     margin-bottom: 20px;
 }
 
-
 .form-group.full {
     grid-column: 1 / -1;
 }
-
 
 .form-group label {
     font-size: 12px;
@@ -273,7 +267,6 @@ button {
 
     color: #4f5560;
 }
-
 
 input,
 textarea,
@@ -293,12 +286,10 @@ select {
     transition: .15s;
 }
 
-
 textarea {
     min-height: 90px;
     resize: vertical;
 }
-
 
 input:focus,
 textarea:focus,
@@ -310,7 +301,6 @@ select:focus {
         rgba(101, 88, 211, .10);
 }
 
-
 .form-error {
     min-height: 20px;
 
@@ -319,9 +309,17 @@ select:focus {
     font-size: 12px;
 }
 
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 15px;
+}
+
 
 /* ============================================================
-   BUTTONS
+   5. BUTTONS
    ============================================================ */
 
 .primary-button,
@@ -339,7 +337,6 @@ select:focus {
     transition: .15s;
 }
 
-
 .primary-button {
     border: 1px solid var(--accent);
 
@@ -347,17 +344,14 @@ select:focus {
     color: white;
 }
 
-
 .primary-button:hover {
     background: var(--accent-hover);
 }
-
 
 .primary-button:disabled {
     opacity: .6;
     cursor: default;
 }
-
 
 .secondary-button {
     border: 1px solid var(--border-dark);
@@ -366,11 +360,9 @@ select:focus {
     color: var(--text);
 }
 
-
 .secondary-button:hover {
     background: var(--surface-soft);
 }
-
 
 .danger-button {
     border: 1px solid var(--danger);
@@ -379,9 +371,66 @@ select:focus {
     color: white;
 }
 
+.icon-action {
+    width: 29px;
+    height: 29px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid transparent;
+    border-radius: 6px;
+
+    background: transparent;
+    color: #9ca1aa;
+
+    cursor: pointer;
+}
+
+.icon-action:hover {
+    background: #f2f3f5;
+}
+
+.icon-action.danger:hover {
+    border-color: #f0d0d0;
+
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.back-button,
+.back-link {
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+    color: var(--text-soft);
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.back-button {
+    margin-bottom: 28px;
+    font-size: 11px;
+}
+
+.back-link {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 8px;
+}
+
+.back-button:hover,
+.back-link:hover {
+    color: var(--accent);
+}
+
 
 /* ============================================================
-   ADMIN
+   6. ADMIN LAYOUT (SIDEBAR + MAIN)
    ============================================================ */
 
 .admin-layout {
@@ -392,7 +441,6 @@ select:focus {
     grid-template-columns:
         235px minmax(0, 1fr);
 }
-
 
 .sidebar {
     height: 100vh;
@@ -409,7 +457,6 @@ select:focus {
     color: white;
 }
 
-
 .sidebar-brand {
     display: flex;
     align-items: center;
@@ -418,7 +465,6 @@ select:focus {
 
     padding: 5px 7px 28px;
 }
-
 
 .brand-icon {
     width: 37px;
@@ -431,12 +477,10 @@ select:focus {
     font-size: 12px;
 }
 
-
 .brand-name {
     font-size: 14px;
     font-weight: 700;
 }
-
 
 .brand-label {
     margin-top: 3px;
@@ -447,14 +491,12 @@ select:focus {
     letter-spacing: 1.7px;
 }
 
-
 .sidebar-nav {
     display: flex;
     flex-direction: column;
 
     gap: 5px;
 }
-
 
 .nav-item {
     width: 100%;
@@ -477,24 +519,21 @@ select:focus {
     text-align: left;
 }
 
-
 .nav-item.active {
     background: #1d2028;
     color: white;
 }
 
-
 .nav-item:disabled {
     cursor: default;
 }
 
-
 .nav-icon {
     width: 18px;
+    flex-shrink: 0;
 
     font-size: 17px;
 }
-
 
 .soon {
     margin-left: auto;
@@ -509,7 +548,6 @@ select:focus {
     font-size: 7px;
 }
 
-
 .sidebar-footer {
     margin-top: auto;
 
@@ -521,7 +559,6 @@ select:focus {
     border-top: 1px solid #24272e;
 }
 
-
 .admin-user {
     min-width: 0;
 
@@ -532,7 +569,6 @@ select:focus {
 
     flex: 1;
 }
-
 
 .user-avatar {
     width: 33px;
@@ -551,7 +587,6 @@ select:focus {
     font-weight: 700;
 }
 
-
 .user-data {
     min-width: 0;
 
@@ -561,12 +596,10 @@ select:focus {
     gap: 3px;
 }
 
-
 .user-name {
     font-size: 10px;
     font-weight: 600;
 }
-
 
 .user-email {
     overflow: hidden;
@@ -579,10 +612,11 @@ select:focus {
     white-space: nowrap;
 }
 
-
 .logout-button {
     width: 32px;
     height: 32px;
+
+    flex-shrink: 0;
 
     border: 0;
 
@@ -592,18 +626,15 @@ select:focus {
     font-size: 18px;
 }
 
-
 .logout-button:hover {
     color: white;
 }
-
 
 .admin-main {
     min-width: 0;
 
     background: var(--bg);
 }
-
 
 .page-content {
     width: min(1200px, 100%);
@@ -615,7 +646,7 @@ select:focus {
 
 
 /* ============================================================
-   PAGE
+   7. PAGE HEADER & SUMMARY BAR
    ============================================================ */
 
 .page-header {
@@ -623,9 +654,10 @@ select:focus {
     align-items: flex-start;
     justify-content: space-between;
 
-    gap: 30px;
-}
+    flex-wrap: wrap;
 
+    gap: 15px 30px;
+}
 
 .page-eyebrow {
     margin-bottom: 8px;
@@ -638,14 +670,14 @@ select:focus {
     letter-spacing: 1.7px;
 }
 
-
 .page-header h1 {
     margin: 0;
 
     font-size: 30px;
     letter-spacing: -1px;
-}
 
+    word-break: break-word;
+}
 
 .page-header p {
     margin: 8px 0 0;
@@ -655,32 +687,34 @@ select:focus {
     font-size: 13px;
 }
 
-
 .summary-bar {
     margin: 34px 0 20px;
 
     display: flex;
 
+    max-width: 100%;
+    overflow-x: auto;
+
     border: 1px solid var(--border);
     border-radius: 11px;
 
     background: white;
-}
 
+    -webkit-overflow-scrolling: touch;
+}
 
 .summary-bar > div {
     min-width: 145px;
+    flex-shrink: 0;
 
     padding: 16px 20px;
 
     border-right: 1px solid var(--border);
 }
 
-
 .summary-bar > div:last-child {
     border: 0;
 }
-
 
 .summary-value {
     margin-right: 7px;
@@ -688,7 +722,6 @@ select:focus {
     font-size: 16px;
     font-weight: 700;
 }
-
 
 .summary-label {
     color: var(--text-muted);
@@ -698,7 +731,7 @@ select:focus {
 
 
 /* ============================================================
-   MODPACK CARDS
+   8. MODPACK CARDS / GRID
    ============================================================ */
 
 .modpack-grid {
@@ -712,7 +745,6 @@ select:focus {
 
     gap: 14px;
 }
-
 
 .modpack-card {
     padding: 20px;
@@ -728,6 +760,9 @@ select:focus {
         border-color .15s;
 }
 
+.modpack-card[data-open-modpack] {
+    cursor: pointer;
+}
 
 .modpack-card:hover {
     transform: translateY(-2px);
@@ -739,12 +774,10 @@ select:focus {
         rgba(20, 24, 35, .05);
 }
 
-
 .modpack-card-top {
     display: flex;
     justify-content: space-between;
 }
-
 
 .pack-symbol {
     width: 40px;
@@ -762,7 +795,6 @@ select:focus {
     font-weight: 750;
 }
 
-
 .pack-status {
     height: 24px;
 
@@ -779,7 +811,6 @@ select:focus {
     font-weight: 600;
 }
 
-
 .pack-status span {
     width: 5px;
     height: 5px;
@@ -787,50 +818,46 @@ select:focus {
     border-radius: 50%;
 }
 
-
 .pack-status.published {
     background: var(--success-soft);
     color: var(--success);
 }
 
-
 .pack-status.published span {
     background: var(--success);
 }
-
 
 .pack-status.draft {
     background: #f1f2f4;
     color: #777d87;
 }
 
-
 .pack-status.draft span {
     background: #969ba4;
 }
-
 
 .modpack-info {
     margin-top: 20px;
 }
 
-
 .modpack-info h2 {
     margin: 0;
 
     font-size: 17px;
-}
 
+    word-break: break-word;
+}
 
 .modpack-slug {
     margin-top: 4px;
+
+    overflow-wrap: anywhere;
 
     color: var(--text-muted);
 
     font-family: monospace;
     font-size: 9px;
 }
-
 
 .modpack-info p {
     min-height: 38px;
@@ -843,7 +870,6 @@ select:focus {
     line-height: 1.6;
 }
 
-
 .modpack-meta {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -854,14 +880,14 @@ select:focus {
     border-bottom: 1px solid var(--border);
 }
 
-
 .modpack-meta div {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
 
     gap: 4px;
 }
-
 
 .modpack-meta span {
     color: var(--text-muted);
@@ -870,11 +896,14 @@ select:focus {
     letter-spacing: 1px;
 }
 
-
 .modpack-meta strong {
-    font-size: 10px;
-}
+    overflow: hidden;
 
+    font-size: 10px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 .modpack-server {
     min-height: 41px;
@@ -889,25 +918,27 @@ select:focus {
     font-size: 9px;
 }
 
-
 .server-dot {
     width: 6px;
     height: 6px;
+    flex-shrink: 0;
 
     border-radius: 50%;
 
     background: var(--success);
 }
 
-
 .modpack-actions {
     display: flex;
+
+    flex-wrap: wrap;
+
     gap: 7px;
 }
 
-
 .card-button {
     flex: 1;
+    min-width: 90px;
 
     height: 35px;
 
@@ -921,11 +952,9 @@ select:focus {
     font-weight: 600;
 }
 
-
 .card-button:hover {
     background: #f1f2f5;
 }
-
 
 .card-button.danger:hover {
     border-color: #f2cccc;
@@ -936,7 +965,7 @@ select:focus {
 
 
 /* ============================================================
-   EMPTY
+   9. EMPTY / LOADING STATES
    ============================================================ */
 
 .loading-card,
@@ -948,15 +977,17 @@ select:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
+    padding: 20px;
+
+    text-align: center;
+}
 
 .loading-card {
     color: var(--text-muted);
 
     font-size: 12px;
 }
-
 
 .empty-state {
     flex-direction: column;
@@ -969,7 +1000,6 @@ select:focus {
     background: rgba(255,255,255,.45);
 }
 
-
 .empty-icon {
     margin-bottom: 7px;
 
@@ -978,11 +1008,9 @@ select:focus {
     font-size: 30px;
 }
 
-
 .empty-state strong {
     font-size: 14px;
 }
-
 
 .empty-state span {
     margin-bottom: 12px;
@@ -994,7 +1022,7 @@ select:focus {
 
 
 /* ============================================================
-   MODAL
+   10. MODAL / CONFIRM MODAL
    ============================================================ */
 
 .modal-overlay {
@@ -1014,11 +1042,9 @@ select:focus {
     backdrop-filter: blur(4px);
 }
 
-
 .modal-overlay.open {
     display: flex;
 }
-
 
 .modal {
     width: min(620px, 100%);
@@ -1037,26 +1063,28 @@ select:focus {
         rgba(0,0,0,.18);
 }
 
-
 .modal-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
 
+    gap: 15px;
+
     margin-bottom: 27px;
 }
-
 
 .modal-header h2 {
     margin: 0;
 
     font-size: 22px;
-}
 
+    word-break: break-word;
+}
 
 .modal-close {
     width: 34px;
     height: 34px;
+    flex-shrink: 0;
 
     border: 0;
     border-radius: 7px;
@@ -1067,18 +1095,9 @@ select:focus {
     font-size: 20px;
 }
 
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    column-gap: 15px;
-}
-
-
 .modal-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
 
     gap: 8px;
@@ -1086,13 +1105,15 @@ select:focus {
     margin-top: 15px;
 }
 
+.modal-actions > * {
+    flex: 1 1 auto;
+}
 
 .confirm-modal {
     width: min(420px, 100%);
 
     text-align: center;
 }
-
 
 .confirm-modal p {
     margin: 15px 0 25px;
@@ -1103,11 +1124,9 @@ select:focus {
     line-height: 1.7;
 }
 
-
 .confirm-modal .modal-actions {
     justify-content: center;
 }
-
 
 .danger-symbol {
     width: 43px;
@@ -1128,7 +1147,7 @@ select:focus {
 
 
 /* ============================================================
-   TOAST
+   11. TOAST
    ============================================================ */
 
 .toast-container {
@@ -1136,18 +1155,22 @@ select:focus {
 
     right: 25px;
     bottom: 25px;
+    left: 25px;
 
     z-index: 200;
 
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
 
     gap: 8px;
-}
 
+    pointer-events: none;
+}
 
 .toast {
     min-width: 220px;
+    max-width: 100%;
 
     padding: 13px 16px;
 
@@ -1167,14 +1190,12 @@ select:focus {
     transition: .2s;
 }
 
-
 .toast.error {
     border-color: #f0cccc;
 
     background: var(--danger-soft);
     color: var(--danger);
 }
-
 
 .toast.show {
     opacity: 1;
@@ -1184,91 +1205,12 @@ select:focus {
 
 
 /* ============================================================
-   RESPONSIVE
-   ============================================================ */
-
-@media (max-width: 800px) {
-
-    .login-page {
-        grid-template-columns: 1fr;
-    }
-
-    .login-decoration {
-        display: none;
-    }
-
-    .admin-layout {
-        grid-template-columns: 75px 1fr;
-    }
-
-    .sidebar-brand > div:last-child,
-    .nav-item:not(.active) .soon,
-    .nav-item {
-        font-size: 0;
-    }
-
-    .nav-icon {
-        font-size: 18px;
-    }
-
-    .user-data {
-        display: none;
-    }
-
-    .page-content {
-        padding: 30px 25px 60px;
-    }
-}
-
-
-@media (max-width: 600px) {
-
-    .page-header {
-        flex-direction: column;
-    }
-
-    .summary-bar {
-        overflow-x: auto;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-group.full {
-        grid-column: auto;
-    }
-}
-
-
-/* ============================================================
-   MODPACK DETAIL
+   12. MODPACK DETAIL PAGE
    ============================================================ */
 
 .detail-page {
     width: 100%;
 }
-
-
-.back-button {
-    margin-bottom: 28px;
-
-    padding: 0;
-
-    border: 0;
-
-    background: transparent;
-    color: var(--text-soft);
-
-    font-size: 11px;
-    font-weight: 600;
-}
-
-
-.back-button:hover {
-    color: var(--accent);
-}
-
 
 .modpack-detail-header {
     display: flex;
@@ -1276,7 +1218,6 @@ select:focus {
 
     gap: 18px;
 }
-
 
 .detail-pack-icon {
     width: 60px;
@@ -1296,37 +1237,37 @@ select:focus {
     font-weight: 800;
 }
 
-
 .detail-pack-info {
     min-width: 0;
 }
 
-
 .detail-title-row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
-    gap: 13px;
+    gap: 8px 13px;
 }
-
 
 .detail-title-row h1 {
     margin: 0;
 
     font-size: 27px;
     letter-spacing: -.7px;
-}
 
+    word-break: break-word;
+}
 
 .detail-slug {
     margin-top: 5px;
+
+    overflow-wrap: anywhere;
 
     color: var(--text-muted);
 
     font-family: monospace;
     font-size: 9px;
 }
-
 
 .detail-pack-info p {
     max-width: 600px;
@@ -1340,9 +1281,7 @@ select:focus {
 }
 
 
-/* ============================================================
-   DETAIL TABS
-   ============================================================ */
+/* ---------- Detail tabs ---------- */
 
 .detail-tabs {
     margin-top: 35px;
@@ -1352,12 +1291,17 @@ select:focus {
 
     gap: 5px;
 
-    border-bottom: 1px solid var(--border);
-}
+    max-width: 100%;
+    overflow-x: auto;
 
+    border-bottom: 1px solid var(--border);
+
+    -webkit-overflow-scrolling: touch;
+}
 
 .detail-tab {
     height: 44px;
+    flex-shrink: 0;
 
     position: relative;
 
@@ -1370,18 +1314,17 @@ select:focus {
 
     font-size: 11px;
     font-weight: 600;
-}
 
+    white-space: nowrap;
+}
 
 .detail-tab:hover:not(:disabled) {
     color: var(--text);
 }
 
-
 .detail-tab.active {
     color: var(--text);
 }
-
 
 .detail-tab.active::after {
     content: "";
@@ -1399,11 +1342,9 @@ select:focus {
     background: var(--accent);
 }
 
-
 .detail-tab.disabled {
     cursor: default;
 }
-
 
 .detail-tab > span {
     margin-left: 5px;
@@ -1419,32 +1360,29 @@ select:focus {
 }
 
 
-/* ============================================================
-   DETAIL SECTION
-   ============================================================ */
+/* ---------- Detail section ---------- */
 
 .detail-section {
     padding-top: 30px;
 }
-
 
 .section-heading {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
 
-    gap: 20px;
+    flex-wrap: wrap;
+
+    gap: 10px 20px;
 
     margin-bottom: 20px;
 }
-
 
 .section-heading h2 {
     margin: 0;
 
     font-size: 18px;
 }
-
 
 .section-heading p {
     margin: 6px 0 0;
@@ -1455,9 +1393,7 @@ select:focus {
 }
 
 
-/* ============================================================
-   GENERAL INFO
-   ============================================================ */
+/* ---------- General info panel ---------- */
 
 .info-panel {
     display: grid;
@@ -1473,8 +1409,8 @@ select:focus {
     background: white;
 }
 
-
 .info-item {
+    min-width: 0;
     min-height: 85px;
 
     display: flex;
@@ -1489,16 +1425,13 @@ select:focus {
     border-bottom: 1px solid var(--border);
 }
 
-
 .info-item:nth-child(2n) {
     border-right: 0;
 }
 
-
 .info-item:nth-last-child(-n + 2) {
     border-bottom: 0;
 }
-
 
 .info-item span {
     color: var(--text-muted);
@@ -1510,15 +1443,14 @@ select:focus {
     text-transform: uppercase;
 }
 
-
 .info-item strong {
+    overflow-wrap: anywhere;
+
     font-size: 12px;
 }
 
 
-/* ============================================================
-   VERSIONS
-   ============================================================ */
+/* ---------- Versions list ---------- */
 
 .versions-list {
     display: flex;
@@ -1527,7 +1459,6 @@ select:focus {
     gap: 9px;
 }
 
-
 .version-card {
     min-height: 105px;
 
@@ -1535,7 +1466,9 @@ select:focus {
     align-items: center;
     justify-content: space-between;
 
-    gap: 25px;
+    flex-wrap: wrap;
+
+    gap: 15px 25px;
 
     padding: 18px 20px;
 
@@ -1552,7 +1485,6 @@ select:focus {
         box-shadow .15s;
 }
 
-
 .version-card:hover {
     transform: translateY(-1px);
 
@@ -1563,16 +1495,15 @@ select:focus {
         rgba(20, 24, 35, .04);
 }
 
-
 .version-main {
     min-width: 0;
+    flex: 1 1 220px;
 
     display: flex;
     align-items: flex-start;
 
     gap: 14px;
 }
-
 
 .version-symbol {
     width: 39px;
@@ -1592,32 +1523,32 @@ select:focus {
     font-weight: 800;
 }
 
-
 .version-info {
     min-width: 0;
 }
 
-
 .version-title {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
-    gap: 10px;
+    gap: 6px 10px;
 }
-
 
 .version-title h3 {
     margin: 0;
 
     font-size: 14px;
-}
 
+    word-break: break-word;
+}
 
 .version-platform {
     margin-top: 8px;
 
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 7px;
 
@@ -1626,18 +1557,15 @@ select:focus {
     font-size: 9px;
 }
 
-
 .version-platform strong {
     margin-left: 2px;
 
     color: #5a606a;
 }
 
-
 .platform-dot {
     color: #c0c3c8;
 }
-
 
 .version-changelog {
     max-width: 650px;
@@ -1655,16 +1583,15 @@ select:focus {
     white-space: nowrap;
 }
 
-
 .version-actions {
     flex-shrink: 0;
 
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 6px;
 }
-
 
 .version-action {
     height: 32px;
@@ -1681,11 +1608,9 @@ select:focus {
     font-weight: 600;
 }
 
-
 .version-action:hover {
     background: #f0f1f3;
 }
-
 
 .version-action.danger:hover {
     border-color: #efcccc;
@@ -1693,7 +1618,6 @@ select:focus {
     background: var(--danger-soft);
     color: var(--danger);
 }
-
 
 .version-open {
     margin-left: 7px;
@@ -1703,56 +1627,13 @@ select:focus {
     font-size: 18px;
 }
 
-
 .version-empty {
     min-height: 250px;
 }
 
 
-.modpack-card[data-open-modpack] {
-    cursor: pointer;
-}
-
-
 /* ============================================================
-   RESPONSIVE DETAIL
-   ============================================================ */
-
-@media (max-width: 700px) {
-
-    .info-panel {
-        grid-template-columns: 1fr;
-    }
-
-    .info-item {
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .info-item:nth-last-child(-n + 2) {
-        border-bottom: 1px solid var(--border);
-    }
-
-    .info-item:last-child {
-        border-bottom: 0;
-    }
-
-    .version-card {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .version-actions {
-        width: 100%;
-    }
-
-    .version-open {
-        margin-left: auto;
-    }
-}
-
-/* ============================================================
-   VERSION DETAIL
+   13. VERSION DETAIL PAGE
    ============================================================ */
 
 .version-detail-page {
@@ -1762,6 +1643,8 @@ select:focus {
 .version-breadcrumb {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+
     gap: 8px;
 
     margin-bottom: 26px;
@@ -1790,19 +1673,26 @@ select:focus {
 
 .version-breadcrumb strong {
     color: var(--text-soft);
+
+    overflow-wrap: anywhere;
 }
 
 .version-detail-header {
     display: flex;
+    flex-wrap: wrap;
+
     justify-content: space-between;
     align-items: flex-start;
+
+    gap: 15px;
 }
 
 .version-detail-title-row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
-    gap: 14px;
+    gap: 8px 14px;
 
     margin-top: 6px;
 }
@@ -1812,6 +1702,8 @@ select:focus {
 
     font-size: 27px;
     letter-spacing: -.8px;
+
+    word-break: break-word;
 }
 
 .version-detail-title-row h1 span {
@@ -1825,6 +1717,7 @@ select:focus {
 .version-environment {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 10px;
 
@@ -1851,21 +1744,26 @@ select:focus {
 }
 
 
-/* ============================================================
-   VERSION TABS
-   ============================================================ */
+/* ---------- Version tabs ---------- */
 
 .version-tabs {
     display: flex;
 
     gap: 4px;
 
+    max-width: 100%;
+    overflow-x: auto;
+
     margin-top: 34px;
 
     border-bottom: 1px solid var(--border);
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .version-tab {
+    flex-shrink: 0;
+
     position: relative;
 
     height: 45px;
@@ -1879,6 +1777,8 @@ select:focus {
 
     font-size: 10px;
     font-weight: 650;
+
+    white-space: nowrap;
 
     cursor: pointer;
 }
@@ -1908,18 +1808,14 @@ select:focus {
 }
 
 
-/* ============================================================
-   VERSION SECTION
-   ============================================================ */
+/* ---------- Version section ---------- */
 
 .version-section {
     padding-top: 28px;
 }
 
 
-/* ============================================================
-   SUMMARY
-   ============================================================ */
+/* ---------- Summary ---------- */
 
 .version-summary-grid {
     display: grid;
@@ -1931,6 +1827,7 @@ select:focus {
 }
 
 .summary-card {
+    min-width: 0;
     min-height: 125px;
 
     display: flex;
@@ -1956,6 +1853,8 @@ select:focus {
 
 .summary-card strong {
     margin-top: auto;
+
+    overflow-wrap: anywhere;
 
     font-size: 20px;
     font-weight: 600;
@@ -1993,7 +1892,7 @@ select:focus {
 
 
 /* ============================================================
-   MOD TOOLBAR
+   14. MODS TOOLBAR & INSTALLED MODS
    ============================================================ */
 
 .mods-toolbar {
@@ -2001,7 +1900,9 @@ select:focus {
     align-items: center;
     justify-content: space-between;
 
-    gap: 15px;
+    flex-wrap: wrap;
+
+    gap: 10px 15px;
 
     margin-bottom: 12px;
 }
@@ -2009,6 +1910,7 @@ select:focus {
 .mods-search {
     width: min(420px, 100%);
     height: 38px;
+    flex: 1 1 260px;
 
     display: flex;
     align-items: center;
@@ -2043,15 +1945,12 @@ select:focus {
 }
 
 .mods-total {
+    flex-shrink: 0;
+
     color: var(--text-muted);
 
     font-size: 9px;
 }
-
-
-/* ============================================================
-   INSTALLED MODS
-   ============================================================ */
 
 .version-mods-list {
     display: flex;
@@ -2067,7 +1966,9 @@ select:focus {
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
+    flex-wrap: wrap;
+
+    gap: 10px 20px;
 
     padding: 11px 14px;
 
@@ -2089,6 +1990,7 @@ select:focus {
 
 .installed-mod-main {
     min-width: 0;
+    flex: 1 1 220px;
 
     display: flex;
     align-items: center;
@@ -2136,6 +2038,7 @@ select:focus {
 .installed-mod-name {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 8px;
 
@@ -2180,6 +2083,7 @@ select:focus {
 
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 8px;
 }
@@ -2229,37 +2133,8 @@ select:focus {
     font-weight: 800;
 }
 
-.icon-action {
-    width: 29px;
-    height: 29px;
 
-    display: grid;
-    place-items: center;
-
-    border: 1px solid transparent;
-    border-radius: 6px;
-
-    background: transparent;
-    color: #9ca1aa;
-
-    cursor: pointer;
-}
-
-.icon-action:hover {
-    background: #f2f3f5;
-}
-
-.icon-action.danger:hover {
-    border-color: #f0d0d0;
-
-    background: var(--danger-soft);
-    color: var(--danger);
-}
-
-
-/* ============================================================
-   ADD SOURCE
-   ============================================================ */
+/* ---------- Add source ---------- */
 
 .add-source-grid {
     display: grid;
@@ -2324,35 +2199,7 @@ select:focus {
 
 
 /* ============================================================
-   RESPONSIVE
-   ============================================================ */
-
-@media (max-width: 750px) {
-
-    .version-summary-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .add-source-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .installed-mod {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .installed-mod-meta {
-        width: 100%;
-    }
-
-    .icon-action {
-        margin-left: auto;
-    }
-}
-
-/* ============================================================
-   ADD MOD / MODRINTH
+   15. ADD MOD MODAL / MODRINTH SEARCH
    ============================================================ */
 
 .add-mod-modal {
@@ -2376,13 +2223,20 @@ select:focus {
 .add-mod-tabs {
     display: flex;
 
+    max-width: 100%;
+    overflow-x: auto;
+
     margin: 20px -24px 0;
     padding: 0 24px;
 
     border-bottom: 1px solid var(--border);
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .add-mod-tab {
+    flex-shrink: 0;
+
     position: relative;
 
     height: 42px;
@@ -2396,6 +2250,8 @@ select:focus {
 
     font-size: 9px;
     font-weight: 650;
+
+    white-space: nowrap;
 
     cursor: pointer;
 }
@@ -2431,7 +2287,7 @@ select:focus {
 }
 
 
-/* SEARCH */
+/* ---------- Search ---------- */
 
 .modrinth-search-view {
     padding-top: 20px;
@@ -2453,6 +2309,7 @@ select:focus {
 
 .modrinth-search-box {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
 
     gap: 8px;
@@ -2488,11 +2345,11 @@ select:focus {
 }
 
 .modrinth-search-box .primary-button {
-    margin-right: 4px;
+    margin: 4px 4px 4px 0;
 }
 
 
-/* RESULTS */
+/* ---------- Results ---------- */
 
 .modrinth-results {
     display: flex;
@@ -2589,6 +2446,7 @@ select:focus {
 .modrinth-project-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 7px;
 
@@ -2617,7 +2475,7 @@ select:focus {
 }
 
 
-/* LOADING / EMPTY */
+/* ---------- Loading / empty ---------- */
 
 .modrinth-welcome,
 .modrinth-loading,
@@ -2631,6 +2489,8 @@ select:focus {
     justify-content: center;
 
     gap: 8px;
+
+    padding: 20px;
 
     color: var(--text-muted);
 
@@ -2669,50 +2529,17 @@ select:focus {
     font-weight: 800;
 }
 
-.spinner {
-    width: 22px;
-    height: 22px;
 
-    border: 2px solid #e3e5e8;
-    border-top-color: var(--accent);
-    border-radius: 50%;
-
-    animation: blockforge-spin .7s linear infinite;
-}
-
-@keyframes blockforge-spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-/* SELECTED PROJECT */
+/* ---------- Selected project ---------- */
 
 .modrinth-version-view {
     padding-top: 18px;
 }
 
-.back-link {
-    padding: 0;
-
-    border: 0;
-
-    background: transparent;
-    color: var(--text-muted);
-
-    font-size: 8px;
-
-    cursor: pointer;
-}
-
-.back-link:hover {
-    color: var(--accent);
-}
-
 .selected-project {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 13px;
 
@@ -2723,6 +2550,8 @@ select:focus {
     margin: 0;
 
     font-size: 16px;
+
+    word-break: break-word;
 }
 
 .selected-project p {
@@ -2734,10 +2563,11 @@ select:focus {
 }
 
 
-/* COMPATIBILITY */
+/* ---------- Compatibility ---------- */
 
 .compatibility-panel {
     display: flex;
+    flex-wrap: wrap;
 
     gap: 7px;
 
@@ -2771,7 +2601,7 @@ select:focus {
 }
 
 
-/* VERSION SELECT */
+/* ---------- Version select ---------- */
 
 .version-selector-group {
     margin-top: 22px;
@@ -2799,7 +2629,7 @@ select:focus {
 }
 
 
-/* FILE */
+/* ---------- File preview ---------- */
 
 .selected-version-info {
     margin-top: 9px;
@@ -2817,7 +2647,9 @@ select:focus {
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
+    flex-wrap: wrap;
+
+    gap: 6px 20px;
 }
 
 .version-file > div:first-child {
@@ -2858,8 +2690,9 @@ select:focus {
 
 .version-extra-info {
     display: flex;
+    flex-wrap: wrap;
 
-    gap: 12px;
+    gap: 6px 12px;
 
     margin-top: 10px;
 
@@ -2869,7 +2702,7 @@ select:focus {
 }
 
 
-/* REQUIRED */
+/* ---------- Required checkbox ---------- */
 
 .required-option {
     display: flex;
@@ -2883,6 +2716,8 @@ select:focus {
 }
 
 .required-option input {
+    flex-shrink: 0;
+
     margin-top: 2px;
 
     accent-color: var(--accent);
@@ -2905,8 +2740,9 @@ select:focus {
     font-size: 8px;
 }
 
+
 /* ============================================================
-   STORAGE UPLOAD
+   16. STORAGE UPLOAD
    ============================================================ */
 
 .storage-upload-view {
@@ -2928,7 +2764,7 @@ select:focus {
 }
 
 
-/* DROPZONE */
+/* ---------- Dropzone ---------- */
 
 .jar-dropzone {
     min-height: 170px;
@@ -2941,11 +2777,14 @@ select:focus {
     gap: 7px;
 
     margin-top: 18px;
+    padding: 20px;
 
     border: 1px dashed #cfd3da;
     border-radius: 11px;
 
     background: #fafbfc;
+
+    text-align: center;
 
     cursor: pointer;
 
@@ -2997,7 +2836,7 @@ select:focus {
 }
 
 
-/* SELECTED FILE */
+/* ---------- Selected file ---------- */
 
 .selected-jar {
     display: flex;
@@ -3065,6 +2904,7 @@ select:focus {
 .selected-jar-ok {
     width: 23px;
     height: 23px;
+    flex-shrink: 0;
 
     display: grid;
     place-items: center;
@@ -3079,7 +2919,7 @@ select:focus {
 }
 
 
-/* FORM */
+/* ---------- Form ---------- */
 
 .storage-form {
     display: flex;
@@ -3120,4 +2960,263 @@ select:focus {
 
 .storage-form input[type="text"]:focus {
     border-color: var(--accent);
+}
+
+
+/* ============================================================
+   17. RESPONSIVE
+   ============================================================ */
+
+/* ---- Tablet / small laptop (≤ 900px) ---- */
+@media (max-width: 900px) {
+
+    .page-content {
+        padding: 38px 32px 60px;
+    }
+
+    .version-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .add-source-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ---- Tablet (≤ 800px) ---- */
+@media (max-width: 800px) {
+
+    .login-page {
+        grid-template-columns: 1fr;
+    }
+
+    .login-decoration {
+        display: none;
+    }
+
+    .admin-layout {
+        grid-template-columns: 75px 1fr;
+    }
+
+    .sidebar {
+        overflow: hidden;
+    }
+
+    .sidebar-brand {
+        justify-content: center;
+    }
+
+    .sidebar-brand > div:last-child,
+    .nav-item:not(.active) .soon {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+
+        padding: 0;
+    }
+
+    .nav-item {
+        font-size: 0;
+    }
+
+    .nav-icon {
+        width: auto;
+
+        font-size: 18px;
+    }
+
+    .user-data {
+        display: none;
+    }
+
+    .admin-user {
+        justify-content: center;
+    }
+
+    .page-content {
+        padding: 30px 25px 60px;
+    }
+}
+
+/* ---- Small tablet / large phone (≤ 700px) ---- */
+@media (max-width: 700px) {
+
+    .info-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .info-item {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .info-item:nth-last-child(-n + 2) {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .info-item:last-child {
+        border-bottom: 0;
+    }
+
+    .version-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .version-actions {
+        width: 100%;
+    }
+
+    .version-open {
+        margin-left: auto;
+    }
+
+    .modpack-detail-header {
+        flex-wrap: wrap;
+    }
+
+    .version-detail-header {
+        flex-direction: column;
+    }
+}
+
+/* ---- Mods / add-mod modal (≤ 750px) ---- */
+@media (max-width: 750px) {
+
+    .version-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .add-source-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .installed-mod {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .installed-mod-meta {
+        width: 100%;
+    }
+
+    .icon-action {
+        margin-left: auto;
+    }
+
+    .mods-search {
+        width: 100%;
+    }
+
+    .add-mod-tabs {
+        margin: 16px -16px 0;
+        padding: 0 16px;
+    }
+}
+
+/* ---- Phones (≤ 600px) ---- */
+@media (max-width: 600px) {
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .summary-bar {
+        overflow-x: auto;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+
+    .modal-overlay {
+        padding: 14px;
+        align-items: flex-end;
+    }
+
+    .modal,
+    .add-mod-modal {
+        width: 100%;
+        max-height: calc(100vh - 28px);
+
+        padding: 20px;
+
+        border-radius: 14px 14px 0 0;
+    }
+
+    .add-mod-modal {
+        max-height: calc(100vh - 28px);
+    }
+
+    .modal-actions > * {
+        flex: 1 1 100%;
+    }
+
+    .toast-container {
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+    }
+
+    .toast {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .modpack-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .selected-project {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .compatibility-panel {
+        flex-direction: column;
+    }
+
+    .compatibility-item {
+        width: 100%;
+    }
+}
+
+/* ---- Small phones (≤ 420px) ---- */
+@media (max-width: 420px) {
+
+    .modpack-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-header h1,
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .detail-title-row h1,
+    .version-detail-title-row h1 {
+        font-size: 21px;
+    }
+
+    .modpack-actions,
+    .version-actions {
+        flex-direction: column;
+    }
+
+    .card-button,
+    .version-action {
+        width: 100%;
+    }
+
+    .modrinth-search-box .primary-button {
+        width: 100%;
+        margin: 6px 0 4px;
+    }
 }
